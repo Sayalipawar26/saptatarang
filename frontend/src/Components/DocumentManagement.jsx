@@ -208,7 +208,7 @@ const DocumentManagement = () => {
                 {filteredDocuments.map((doc) => (
                   <TableRow key={doc._id} sx={{ '&:hover': { backgroundColor: '#f5f5f5' } }}>
                     <TableCell sx={{ fontWeight: 500 }}>
-                      <a href={`http://localhost:5000${doc.fileUrl}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://api.saptatarang.com${doc.fileUrl}`} target="_blank" rel="noopener noreferrer">
                         {doc.title}
                       </a>
                     </TableCell>
@@ -217,7 +217,7 @@ const DocumentManagement = () => {
                     <TableCell sx={{ textAlign: 'center' }}>
                       <Button 
                         variant="outlined" 
-                        href={`http://localhost:5000${doc.fileUrl}`} 
+                        href={`https://api.saptatarang.com${doc.fileUrl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         sx={{ mr: 1 }}

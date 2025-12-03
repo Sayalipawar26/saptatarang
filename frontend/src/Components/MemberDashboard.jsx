@@ -25,7 +25,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { Description, Close } from "@mui/icons-material";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useMediaQuery } from '@mui/material';
@@ -76,10 +76,8 @@ const MemberDashboard = () => {
 
   const fetchDocuments = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get("http://localhost:5000/api/docs", config);
-      setDocuments(response.data);
+      const { data } = await api.get("/docs");
+      setDocuments(data);
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
@@ -380,7 +378,7 @@ const MemberDashboard = () => {
             <Box sx={{ display: "flex", justifyContent: "center", p: 2, overflow: "auto" }}>
               <div style={{ maxWidth: "100%", overflowX: "auto" }}>
                 <Document
-                  file={`http://localhost:5000${selectedDoc.fileUrl}`}
+                  file={`https://api.saptatarang.com${selectedDoc.fileUrl}`}
                   onLoadSuccess={({ numPages }) => setNumPages(numPages)}
                 >
                   {Array.from(new Array(numPages), (el, index) => (
