@@ -18,7 +18,8 @@ app.use(cors({
     origin: [
       "http://localhost:3001",             
       "http://localhost:3000",  
-      "https://saptatarang0.netlify.app"          
+      "https://saptatarang0.netlify.app"  , 
+      "https://saptatarang.com"       
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
