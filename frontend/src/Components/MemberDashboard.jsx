@@ -76,7 +76,7 @@ const MemberDashboard = () => {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await api.get("/docs");
+      const { data } = await api.get("https://api.saptatarang.com/api/docs");
       setDocuments(data);
     } catch (error) {
       console.error("Error fetching documents:", error);

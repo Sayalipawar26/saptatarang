@@ -51,7 +51,7 @@ const DocumentManagement = () => {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await api.get('/docs');
+      const { data } = await api.get('https://api.saptatarang.com/api/docs');
       setDocuments(data);
       setError('');
     } catch (err) {
@@ -72,7 +72,7 @@ const DocumentManagement = () => {
       formData.append('file', file);
       formData.append('title', title.trim());
       formData.append('category', category);
-      await api.post('/docs', formData);
+      await api.post('https://api.saptatarang.com/api/docs', formData);
       setTitle('');
       setCategory('General');
       setError('');
@@ -85,7 +85,7 @@ const DocumentManagement = () => {
 
   const handleDeleteDocument = async (id) => {
     try {
-      await api.delete(`/docs/${id}`);
+      await api.delete(`https://api.saptatarang.com/api/docs/${id}`);
       fetchDocuments();
     } catch (err) {
       const msg = err?.response?.data?.message || 'Delete failed';

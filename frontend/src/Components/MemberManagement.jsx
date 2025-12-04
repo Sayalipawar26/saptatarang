@@ -63,7 +63,7 @@ const MemberManagement = () => {
 
   const fetchMembers = async () => {
     try {
-      const { data } = await api.get('/members');
+      const { data } = await api.get('https://api.saptatarang.com/api/members');
       setMembers(data);
       setError('');
     } catch (err) {
@@ -79,7 +79,7 @@ const MemberManagement = () => {
       return;
     }
     try {
-      await api.post('/members', { 
+      await api.post('https://api.saptatarang.com/api/members', { 
         firstName: firstName.trim(), 
         lastName: lastName.trim(), 
         email: email.trim(), 
@@ -109,7 +109,7 @@ const MemberManagement = () => {
 
   const handleDeleteMember = async (id) => {
     try {
-      await api.delete(`/members/${id}`);
+      await api.delete(`https://api.saptatarang.com/api/members/${id}`);
       setSuccess('Member deleted successfully');
       setError('');
       fetchMembers();
@@ -122,7 +122,7 @@ const MemberManagement = () => {
 
   const handleUpdateMember = async () => {
     try {
-      await api.put(`/members/${selectedMember._id}`, { 
+      await api.put(`https://api.saptatarang.com/api/members/${selectedMember._id}`, { 
         firstName: selectedMember.firstName, 
         lastName: selectedMember.lastName, 
         email: selectedMember.email,

@@ -31,7 +31,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/login', {
+      const response = await axios.post('https://api.saptatarang.com/api/auth/login', {
         email,
         password,
       });
