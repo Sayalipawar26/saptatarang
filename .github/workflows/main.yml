@@ -1,0 +1,39 @@
+name: Build Frontend
+
+on:
+  push:
+    branches:
+      - main  # Trigger build on push to 'main' branch
+  pull_request:
+    branches:
+      - main  # Trigger build on pull request to 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub Actions runner environment
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify your Node.js version
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Build the React app
+      - name: Build Frontend
+        run: npm run build  # This will generate the build folder
+
+      # Step 5: Upload build as artifact
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-build
+          path: ./build  # Path to the build folder
