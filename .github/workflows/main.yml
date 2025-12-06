@@ -1,39 +1,52 @@
-name: Build Frontend
+name: Deploy to Hostinger VPS
 
 on:
   push:
     branches:
-      - main  # Trigger build on push to 'main' branch
-  pull_request:
-    branches:
-      - main  # Trigger build on pull request to 'main' branch
+      - main  # Change this if your default branch is different
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # GitHub Actions runner environment
-
+  deploy:
+    runs-on: ubuntu-latest
+    
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Specify your Node.js version
+          node-version: '18'  # Adjust to your Node version
 
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: npm install
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
 
-      # Step 4: Build the React app
-      - name: Build Frontend
-        run: npm run build  # This will generate the build folder
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
 
-      # Step 5: Upload build as artifact
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: frontend-build
-          path: ./build  # Path to the build folder
+      - name: Setup SSH
+        run: |
+         mkdir -p ~/.ssh
+echo "${{ secrets.VPS_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+chmod 600 ~/.ssh/id_rsa
+ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+
+      - name: Deploy frontend to VPS
+        run: |
+          rsync -avz --delete ./frontend/build/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/saptatarang.com/
+
+      - name: Deploy backend to VPS
+        run: |
+          rsync -avz --delete --exclude 'node_modules' --exclude '.env' ./backend/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/api.saptatarang.com/
+
+      - name: Install backend dependencies and restart
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd /var/www/api.saptatarang.com
+            npm ci --production
+            pm2 restart saptatarang-api || pm2 start server.js --name saptatarang-api
+            pm2 save
+          EOF
