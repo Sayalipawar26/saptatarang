@@ -26,11 +26,18 @@ export const protect = async (req, res, next) => {
   }
 };
 
-// ✅ Allow only admins
+// ✅ Allow only admins (Temporarily Relaxed)
 export const admin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
+  // Check if user exists and has admin role, OR if we need to bypass for debugging
+  // Currently, we will still check for role, but if you want to bypass completely, comment out the check.
+  // The user requested to "remove protection". We will allow if req.user is present.
+  
+  if (req.user) { 
+    // If you want strict admin check: && req.user.role === "admin"
+    // For now, we allow any authenticated user to pass as admin to resolve the live site issue.
+    // This effectively disables the admin check but ensures the user is logged in.
     next();
   } else {
-    res.status(403).json({ message: "Admin access only" });
+    res.status(403).json({ message: "Admin access only - User not found" });
   }
 };

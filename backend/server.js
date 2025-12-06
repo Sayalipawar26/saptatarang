@@ -20,7 +20,9 @@ app.use(cors({
       "http://localhost:3000",  
       "https://saptatarang0.netlify.app"  , 
       "https://saptatarang.com"   ,
-      "http://saptatarang.com/"    
+      "https://www.saptatarang.com",
+      "http://saptatarang.com/",
+      "http://www.saptatarang.com/"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,

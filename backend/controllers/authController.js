@@ -17,7 +17,16 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
 
     // Create new user
-    const user = await User.create({ firstName, lastName, email, password, role, wing, flatNo, mobileNumber });
+    const user = await User.create({ 
+      firstName, 
+      lastName, 
+      email, 
+      password, 
+      role,
+      wing: wing || "N/A", // Default if missing
+      flatNo: flatNo || "N/A",
+      mobileNumber: mobileNumber || "N/A"
+    });
 
     res.status(201).json({
       _id: user._id,
@@ -30,6 +39,43 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// 🛠️ Temporary Setup Route to Create Admin
+export const setupAdmin = async (req, res) => {
+  try {
+    const adminEmail = "admin@saptatarang.com";
+    const adminPassword = "Admin@12345"; // User can change this later
+
+    // Check if admin already exists
+    let user = await User.findOne({ email: adminEmail });
+
+    if (user) {
+      return res.json({ message: "Admin user already exists", email: adminEmail });
+    }
+
+    // Create new admin
+    user = await User.create({
+      firstName: "Super",
+      lastName: "Admin",
+      email: adminEmail,
+      password: adminPassword,
+      role: "admin",
+      wing: "AdminWing",
+      flatNo: "000",
+      mobileNumber: "0000000000"
+    });
+
+    res.status(201).json({
+      message: "Admin user created successfully",
+      email: user.email,
+      password: adminPassword, // Returning password so user can see it (TEMPORARY)
+      role: user.role
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
   }
 };
 
