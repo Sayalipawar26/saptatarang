@@ -8,7 +8,7 @@ const generateToken = (id, role) => {
 
 // ✅ Register User (Admin or Member)
 export const registerUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { firstName, lastName, email, password, role, wing, flatNo, mobileNumber } = req.body;
 
   try {
     // Check if user exists
@@ -17,11 +17,12 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
 
     // Create new user
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({ firstName, lastName, email, password, role, wing, flatNo, mobileNumber });
 
     res.status(201).json({
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
       token: generateToken(user._id, user.role),
@@ -42,7 +43,8 @@ export const loginUser = async (req, res) => {
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         token: generateToken(user._id, user.role),

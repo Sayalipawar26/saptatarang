@@ -10,9 +10,9 @@ import {
 
 const router = express.Router();
 
-router.post("/",  admin, addMember);          // Add member
-router.get("/",  admin, getMembers);          // List members
-router.put("/:id",  admin, updateMember);     // Update member
-router.delete("/:id", admin, deleteMember);  // Delete member
+router.post("/", protect, admin, addMember);          // Add member
+router.get("/", protect, admin, getMembers);          // List members
+router.put("/:id", protect, admin, updateMember);     // Update member
+router.delete("/:id", protect, admin, deleteMember);  // Delete member
 
 export default router;
